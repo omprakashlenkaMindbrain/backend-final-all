@@ -18,15 +18,20 @@ import deserializeUser from "./User/middlewares/deserializeUser";
 const app = express();
 const port = config.get<number>("port");
 
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",           
-      "https://beta-v-git-main-omprakashlenkamindbrains-projects.vercel.app/" 
-    ],
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: [
+//       "http://localhost:5173",           
+//       "https://beta-v-git-main-omprakashlenkamindbrains-projects.vercel.app/" 
+//     ],
+//     credentials: true,
+//   })
+// );
+
+app.options("*", cors());
+
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
