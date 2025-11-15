@@ -20,7 +20,10 @@ const port = config.get<number>("port");
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://beta-gfklo7wgr-omprakashlenkamindbrains-projects.vercel.app/"
+    ],
     credentials: true,
   })
 );
