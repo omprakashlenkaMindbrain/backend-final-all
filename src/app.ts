@@ -25,8 +25,11 @@ app.use(
       "https://beta-gfklo7wgr-omprakashlenkamindbrains-projects.vercel.app"
     ],
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
