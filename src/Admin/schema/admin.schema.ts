@@ -1,10 +1,9 @@
 // src/schema/user.schema.ts
 import { z } from "zod";
-import AdminModel from "../models/user.model";
 
 export const createAdminSchema = z.object({
   body: z.object({
-    name: z.string({ error: "Name is required" }).regex(/^[A-Za-z]+$/, "Only alphabets allowed"),
+    name: z.string({ error: "Name is required" }).regex(/^[A-Za-z\s]+$/, "Only alphabets allowed"),
     email: z.string({ error: "Email is required" }).email("Not a valid email"),
      mobno: z
       .string({ error: "Mobile number is required" })

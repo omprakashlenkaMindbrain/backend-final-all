@@ -1,37 +1,39 @@
-import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import config from "config";
-import { Readable } from "stream";
+import multer from "multer";
 import sharp from "sharp";
+import { Readable } from "stream";
 
-// ✅ Define Cloudinary result type
+//  Define Cloudinary result type
 export interface CloudinaryUploadResult {
   url: string;
   public_id: string;
 }
 
-// ✅ Cloudinary config
+//  Cloudinary config
 cloudinary.config({
   cloud_name: config.get<string>("CLOUDINARY_CLOUD_NAME"),
   api_key: config.get<string>("CLOUDINARY_API_KEY"),
   api_secret: config.get<string>("CLOUDINARY_API_SECRET"),
 });
 
-// ✅ Use memory storage (fast)
+//  Use memory storage (fast)
 const storage = multer.memoryStorage();
 
 const allowedMimeTypes = [
   "image/jpeg",
   "image/png",
   "image/jpg",
+  "image/webp",
   "application/pdf",
+
 ];
 
-// ✅ Multer setup
+//  Multer setup
 export const uploader = multer({
   storage,
-  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
-  fileFilter: (req, file, cb) => {
+  limits: { fileSize: 1 * 1024 * 1024 }, // 2MB
+  fileFilter: (_req, file, cb) => {
     if (!allowedMimeTypes.includes(file.mimetype)) {
       return cb(new Error("Only JPG, PNG, and PDF files are allowed!"));
     }
@@ -39,7 +41,7 @@ export const uploader = multer({
   },
 });
 
-// ✅ Upload to Cloudinary directly from buffer
+//  Upload to Cloudinary directly from buffer
 export const uploadfile = async (
   fileBuffer: Buffer,
   folder?: string
@@ -80,8 +82,8 @@ export const uploadfile = async (
       const stream = Readable.from(fileBuffer);
       stream.pipe(uploadStream);
     });
-  } catch (error) {
-    console.error("Upload error:", error);
+  } catch (error:any) {
+    console.error("Upload error:", error.message);
     return null;
   }
 };

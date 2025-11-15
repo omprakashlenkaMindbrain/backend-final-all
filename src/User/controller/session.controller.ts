@@ -15,8 +15,8 @@ import { validatePassword } from "../services/user.service";
 export async function createUserSessionHandler(req: Request, res: Response) {
   const user = await validatePassword(req.body);
 
-  if (!user) {
-    return res.status(401).send("Invalid mobile or password");
+if (!user) {
+    return res.status(401).send({success:false,message:"Invalid mob or password"});
   }
 
   const session = await createSession(user._id.toString(), req.get("user-agent") || "");
@@ -53,9 +53,9 @@ export async function createUserSessionHandler(req: Request, res: Response) {
  
 }
 
-export async function getUserSessionsHandler(req: Request, res: Response) {
+export async function getUserSessionsHandler(_req:Request, res: Response) {
   try {
-    const userId = res.locals.user._id;
+    const userId = res.locals?.user._id;
 
     // ✅ Fetch user and sessions
     const sessions = await findSessions({ user: userId, valid: true });
@@ -94,7 +94,7 @@ export async function getUserSessionsHandler(req: Request, res: Response) {
   }
 }
 
-export async function deleteSessionHandler(req: Request, res: Response) {
+export async function deleteSessionHandler(res: Response) {
   const sessionId = res.locals.user.session;
 
   await SessionModel.findByIdAndDelete(sessionId);

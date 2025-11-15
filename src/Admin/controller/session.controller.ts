@@ -17,8 +17,8 @@ import { validatePassword } from "../services/user.service";
 export async function createAdminSessionHandler(req: Request, res: Response) {
   const user = await validatePassword(req.body);
 
-  if (!user) {
-    return res.status(401).send("Invalid email or password");
+if (!user) {
+    return res.status(401).send({success:false,message:"Invalid mob or password"});
   }
 
   const session = await createSession(user._id.toString(), req.get("user-agent") || "");
@@ -86,7 +86,7 @@ export const getAllUsersWithKycAndPlan = async (req: Request, res: Response) => 
     const skip = (page - 1) * limit;
 
     const users = await UserModel.aggregate([
-      // ✅ Join with KYC
+      // Join with KYC
       {
         $lookup: {
           from: "kycmodels", // the actual collection name in MongoDB
@@ -102,7 +102,7 @@ export const getAllUsersWithKycAndPlan = async (req: Request, res: Response) => 
         },
       },
 
-      // ✅ Join with Plan
+      //  Join with Plan
       {
         $lookup: {
           from: "plans",
@@ -117,8 +117,9 @@ export const getAllUsersWithKycAndPlan = async (req: Request, res: Response) => 
           preserveNullAndEmptyArrays: true,
         },
       },
+      { $sort: { createdAt: -1 } },
 
-      // ✅ Only include specific fields
+      //  Only include specific fields
       {
         $project: {
           _id: 1,

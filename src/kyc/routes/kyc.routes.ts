@@ -1,15 +1,22 @@
-import { uploadFile } from './../Controller/kyc.controller';
-import express from 'express'
-import { uploader } from '../../utils/upload'
+import express from 'express';
 import { requireUser } from '../../User/middlewares/requiredUser';
-import { updatekyc } from './../Controller/kyc.controller';
+import uploadHandler from '../../utils/MulterErrorHandler';
+import { updatekyc, uploadFile } from './../Controller/kyc.controller';
+
+
 
 export const kycrouter = express.Router()
 
-kycrouter.post('/kyc/upload',requireUser,uploader.fields([{ name: "adhara_img", maxCount: 1 },
-    { name: "pan_img", maxCount: 1 },]),
-    uploadFile
-)
+kycrouter.post(
+  '/kyc/upload',
+  requireUser,
+  uploadHandler, // handles multer and errors
+  uploadFile
+);
 
-kycrouter.put("/kyc/update",requireUser,uploader.fields([{ name: "adhara_img", maxCount: 1 },
-    { name: "pan_img", maxCount: 1 },]),updatekyc)
+kycrouter.put(
+  '/kyc/update',
+  requireUser,
+  uploadHandler, // handles multer and errors
+  updatekyc
+);
