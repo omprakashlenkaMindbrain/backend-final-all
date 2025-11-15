@@ -20,19 +20,10 @@ const port = config.get<number>("port");
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",           
-      "https://beta-v-git-main-omprakashlenkamindbrains-projects.vercel.app/" ,
-      "https://beta-qqi3iyc0c-omprakashlenkamindbrains-projects.vercel.app/"
-    ],
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
-
-// app.options("*", cors());
-
-
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
