@@ -20,7 +20,7 @@ const port = config.get<number>("port");
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://mlm-frontend-dun.vercel.app",
     credentials: true,
   })
 );
