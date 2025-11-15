@@ -24,20 +24,6 @@ app.use(
     credentials: true,
   })
 );
-
-
-
-// app.use(
-//   cors({
-//     origin: [
-//       "http://localhost:5173",
-//       "https://beta-gfklo7wgr-omprakashlenkamindbrains-projects.vercel.app"
-//     ],
-//     credentials: true,
-//     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-//     allowedHeaders: ["Content-Type", "Authorization"],
-//   })
-// );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
