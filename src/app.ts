@@ -22,11 +22,12 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://beta-gfklo7wgr-omprakashlenkamindbrains-projects.vercel.app/"
+      "https://beta-gfklo7wgr-omprakashlenkamindbrains-projects.vercel.app"
     ],
     credentials: true,
   })
 );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
