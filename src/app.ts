@@ -22,7 +22,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",           
-      "https://beta-i9xvtk9xn-omprakashlenkamindbrains-projects.vercel.app/" 
+      "https://beta-v-git-main-omprakashlenkamindbrains-projects.vercel.app/" 
     ],
     credentials: true,
   })
