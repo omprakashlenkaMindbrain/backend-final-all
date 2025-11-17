@@ -65,7 +65,7 @@ export async function getAdminSessionsHandler(req:Request, res: Response) {
   return res.send({sessions,admin});
 }
 
-export async function deleteSessionHandler(res: Response) {
+export async function deleteSessionHandler(_req:Request,res: Response) {
   const sessionId = res.locals.user.session;
 
   await AdminSessionModel.findByIdAndDelete(sessionId);

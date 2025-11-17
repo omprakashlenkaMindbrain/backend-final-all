@@ -25,7 +25,7 @@ app.use(
       "http://localhost:5174"
     ],
     credentials: true,
-    methods:["GET","POST"],
+    // methods:["GET","POST"],
     allowedHeaders:["Content-Type","Authorization"]
   })
 );

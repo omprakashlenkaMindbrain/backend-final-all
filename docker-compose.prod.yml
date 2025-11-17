@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mlm-backend
+    ports:
+      - "8030:8030"
+    restart: always
+    env_file:
+      - .env 

@@ -1,21 +1,36 @@
-FROM node:18
+# ---------- Stage 1: Build ----------
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Copy package first
+# Install deps
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install
 
-# Copy rest of the backend
+# Copy source code
 COPY . .
 
-# Build TypeScript
+# Build TypeScript → JavaScript
 RUN npm run build
 
-# Expose your backend port (change if needed)
-EXPOSE 5000
 
-# Run server
-CMD ["npm", "start"]
+# ---------- Stage 2: Run ----------
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy built files and node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+
+# Copy environment variables
+COPY .env .env
+
+# Copy production config JSON
+COPY config/default.json ./config/default.json
+
+# Set default MODE
+ENV MODE=prod
+
+# Run the app
+CMD ["node", "dist/app.js"]
