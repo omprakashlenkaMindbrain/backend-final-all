@@ -20,19 +20,24 @@ const port = config.get<number>("port");
 
 app.use(
   cors({
-    origin: "https://mlm-frontend-dun.vercel.app",
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174"
+    ],
     credentials: true,
+    methods:["GET","POST"],
+    allowedHeaders:["Content-Type","Authorization"]
   })
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// ✅ Correct order — these run before routes
+// Correct order — these run before routes
 app.use(deserializeUser);
 app.use(deserializeAdmin);
 
-// ✅ Mount routes
+// Mount routes
 app.use("/", Adminroutes);
 app.use("/", userRouter);
 app.use("/", kycrouter);

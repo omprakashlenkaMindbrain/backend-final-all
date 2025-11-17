@@ -77,7 +77,7 @@ export async function deleteSessionHandler(res: Response) {
   });
 }
 
-
+;
 
 export const getAllUsersWithKycAndPlan = async (req: Request, res: Response) => {
   try {
@@ -89,20 +89,15 @@ export const getAllUsersWithKycAndPlan = async (req: Request, res: Response) => 
       // Join with KYC
       {
         $lookup: {
-          from: "kycmodels", // the actual collection name in MongoDB
+          from: "kycmodels",
           localField: "_id",
           foreignField: "userid",
           as: "kyc",
         },
       },
-      {
-        $unwind: {
-          path: "$kyc",
-          preserveNullAndEmptyArrays: true,
-        },
-      },
+      { $unwind: { path: "$kyc", preserveNullAndEmptyArrays: true } },
 
-      //  Join with Plan
+      // Join with Plan
       {
         $lookup: {
           from: "plans",
@@ -111,29 +106,27 @@ export const getAllUsersWithKycAndPlan = async (req: Request, res: Response) => 
           as: "plan",
         },
       },
-      {
-        $unwind: {
-          path: "$plan",
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      { $sort: { createdAt: -1 } },
+      { $unwind: { path: "$plan", preserveNullAndEmptyArrays: true } },
 
-      //  Only include specific fields
+      // Select fields
       {
         $project: {
           _id: 1,
           name: 1,
           email: 1,
           mobno: 1,
+          createdAt: 1,               // user.createdAt
           "kyc.adhara_img": 1,
           "kyc.pan_img": 1,
           "kyc.status": 1,
           "plan.plan_name": 1,
-          "plan.createdAt": 1,
-          "plan.payment_ss":1,
+          planCreatedAt: "$plan.createdAt",   //  FIXED
+          "plan.payment_ss": 1,
         },
       },
+
+      // Sort by USER createdAt (newest first)
+      { $sort: { createdAt: -1 } },
 
       { $skip: skip },
       { $limit: limit },
@@ -161,8 +154,6 @@ export const getAllUsersWithKycAndPlan = async (req: Request, res: Response) => 
     });
   }
 };
-
-
 export const updateKycStatus = async (req: Request, res: Response) => {
   try {
     const { id } = req.params; // id = user's _id (whose KYC admin is updating)
