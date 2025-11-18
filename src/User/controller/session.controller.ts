@@ -57,7 +57,7 @@ export async function getUserSessionsHandler(_req:Request, res: Response) {
   try {
     const userId = res.locals?.user._id;
 
-    // ✅ Fetch user and sessions
+    // Fetch user and sessions
     const sessions = await findSessions({ user: userId, valid: true });
     const user = omit(await UserModel.findById(userId).lean(), "password");
 

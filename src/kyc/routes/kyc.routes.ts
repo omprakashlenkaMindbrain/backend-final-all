@@ -8,14 +8,14 @@ import { updatekyc, uploadFile } from './../Controller/kyc.controller';
 export const kycrouter = express.Router()
 
 kycrouter.post(
-  '/kyc/upload',
+  '/api/kyc/upload',
   requireUser,
   uploadHandler, // handles multer and errors
   uploadFile
 );
 
 kycrouter.put(
-  '/kyc/update',
+  '/api/kyc/update',
   requireUser,
   uploadHandler, // handles multer and errors
   updatekyc

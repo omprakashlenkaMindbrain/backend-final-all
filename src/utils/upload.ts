@@ -45,7 +45,7 @@ export const uploader = multer({
 export const uploadfile = async (
   fileBuffer: Buffer,
   folder?: string
-): Promise<CloudinaryUploadResult | null> => { // 👈 explicit return type
+): Promise<CloudinaryUploadResult | null> => { //  explicit return type
   try {
     const isPdf = Buffer.from(fileBuffer.subarray(0, 4)).toString() === "%PDF";
       let processedBuffer = fileBuffer;

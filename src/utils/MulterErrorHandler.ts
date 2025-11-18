@@ -28,7 +28,7 @@ const uploadHandler = (req:Request, res:Response, next:NextFunction) => {
       });
     }
 
-    // ✅ No errors, continue to controller
+    // No errors, continue to controller
     next();
   });
 };

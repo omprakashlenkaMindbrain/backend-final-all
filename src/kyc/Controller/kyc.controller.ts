@@ -9,44 +9,44 @@ export const uploadFile = async (req: Request, res: Response) => {
     if (!user || !user._id) {
       return res.status(401).json({ message: "Unauthorized: user not found" });
     }
-    const existUser = await kycmodel.findOne({userid: user._id })
-    if(existUser){
-      return res.status(404).json({msg:"KYC already uploaded. You cannot upload again."})
+    const existUser = await kycmodel.findOne({ userid: user._id })
+    if (existUser) {
+      return res.status(404).json({ msg: "KYC already uploaded. You cannot upload again." })
     }
-   
+
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
     const adharaFile = files?.adhara_img?.[0];
     const panFile = files?.pan_img?.[0];
-     const [adharaUpload, panUpload] = await Promise.all([
-  uploadfile(adharaFile.buffer, "kyc"),
-  uploadfile(panFile.buffer, "kyc"),
-]);
+    const [adharaUpload, panUpload] = await Promise.all([
+      uploadfile(adharaFile.buffer, "kyc"),
+      uploadfile(panFile.buffer, "kyc"),
+    ]);
 
     if (!adharaUpload || !panUpload) {
       return res.status(500).json({ msg: "Cloudinary upload failed" });
     }
     const kycData = await kycmodel.create({
-      userid:user._id,          
+      userid: user._id,
       adhara_img: adharaUpload.url,
       pan_img: panUpload.url,
     });
     Promise.allSettled([
-  user.email &&
-    sendMail({
-      to: user.email,
-      subject: "KYC Upload Confirmation",
-      html: `<p>Your KYC has been uploaded successfully.</br>
+      user.email &&
+      sendMail({
+        to: user.email,
+        subject: "KYC Upload Confirmation",
+        html: `<p>Your KYC has been uploaded successfully.</br>
       
         Our verification team will review your submission shortly.
         You’ll receive an email notification once the verification process is complete.
       </p>`,
-    }),
-  sendMail({
-    to: config.get<string>("ADMIN_EMAIL"),
-    subject: "New KYC Submission Alert",
-    html: `<p>${user.name} uploaded new KYC documents.</p>`,
-  }),
-]);
+      }),
+      sendMail({
+        to: config.get<string>("ADMIN_EMAIL"),
+        subject: "New KYC Submission Alert",
+        html: `<p>${user.name} uploaded new KYC documents.</p>`,
+      }),
+    ]);
     res.status(201).json({
       message: "KYC uploaded successfully",
       data: kycData,
@@ -81,7 +81,7 @@ export const updatekyc = async (req: Request, res: Response) => {
 
     const updatedimg: Partial<{ adhara_img: string; pan_img: string }> = {};
 
-  
+
     const [adharaUpload, panUpload] = await Promise.all([
       files.adhara_img?.[0]
         ? uploadfile(files.adhara_img[0].buffer, "kyc")
@@ -97,7 +97,7 @@ export const updatekyc = async (req: Request, res: Response) => {
     //  Update the database record
     const updatedKyc = await kycmodel.findOneAndUpdate(
       { userid: user._id },
-      { 
+      {
         ...updatedimg,
         status: "pending",       // reset status automatically
         updatedAt: new Date(),
@@ -115,15 +115,15 @@ export const updatekyc = async (req: Request, res: Response) => {
     //  Send emails asynchronously (non-blocking)
     Promise.allSettled([
       user.email &&
-        sendMail({
-          to: user.email,
-          subject: "KYC Updated Successfully",
-          html: `
+      sendMail({
+        to: user.email,
+        subject: "KYC Updated Successfully",
+        html: `
             <h2>KYC Updated Successfully</h2>
             <p>Dear ${user.name || "User"},</p>
             <p>Your KYC documents were successfully updated on ${new Date().toLocaleString()}.</p>
           `,
-        }),
+      }),
       sendMail({
         to: config.get<string>("ADMIN_EMAIL"),
         subject: "KYC Update Notification",

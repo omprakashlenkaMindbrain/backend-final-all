@@ -45,5 +45,5 @@ app.use("/", planrouter);
 
 app.listen(port, async () => {
   await connectDB();
-  logger.info(`🚀 Server running at http://localhost:${port}`);
+  logger.info(` Server running at http://localhost:${port}`);
 });

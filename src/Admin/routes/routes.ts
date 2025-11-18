@@ -10,17 +10,17 @@ import { createSessionSchema } from '../schema/session.schema';
 const Adminroutes = express.Router()
 
     Adminroutes.post('/api/admin',validateResorces(createAdminSchema),createAdminHandler)
-    Adminroutes.post('/admin/sessions',validateResorces(createSessionSchema),createAdminSessionHandler)
-    Adminroutes.get('/admin/sessions', requireAdmin ,getAdminSessionsHandler);
-    Adminroutes.delete("/admin/sessions", requireAdmin, deleteSessionHandler);
-    Adminroutes.get("/user/Alldetails",getAllUsersWithKycAndPlan)
-    Adminroutes.put("/admin/kyc/update/:id",requireAdmin,updateKycStatus)
+    Adminroutes.post('/api/admin/sessions',validateResorces(createSessionSchema),createAdminSessionHandler)
+    Adminroutes.get('/api/admin/sessions', requireAdmin ,getAdminSessionsHandler);
+    Adminroutes.delete("/api/admin/sessions", requireAdmin, deleteSessionHandler);
+    Adminroutes.get("/api/user/Alldetails",getAllUsersWithKycAndPlan)
+    Adminroutes.put("/api/admin/kyc/update/:id",requireAdmin,updateKycStatus)
 
     //for upload qr
-    Adminroutes.post('/admin/session/qr',requireAdmin,uploader.single('qr'),setQrHandler)
+    Adminroutes.post('/api/admin/session/qr',requireAdmin,uploader.single('qr'),setQrHandler)
     // Adminroutes.post('/admin/session/qr',uploader.single('qr'),setQrHandler)
-   Adminroutes.put('/admin/session/qr-edit',requireAdmin,uploader.single("qr"),editQrHandler)
+   Adminroutes.put('/api/admin/session/qr-edit',requireAdmin,uploader.single("qr"),editQrHandler)
 //    Adminroutes.put('/admin/session/qr-edit',uploader.single("qr"),editQrHandler)
-   Adminroutes.get('/admin/qr',getQrComtroller)
+   Adminroutes.get('/api/admin/qr',getQrComtroller)
    
 export default Adminroutes;
